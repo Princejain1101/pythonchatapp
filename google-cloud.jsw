@@ -1,0 +1,28 @@
+import { fetch } from 'wix-fetch';
+import { getSecret } from 'wix-secrets-backend';
+
+const postData = {
+    "id": 'value1',
+    "request": 'how are you?'
+};
+export async function getResponseGCP(query) {
+    const url = "https://chatbot-openai-2.uw.r.appspot.com/chatbot";
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(query),
+    };
+    try{
+        const response = await fetch(url, options);
+        console.log(response)
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.Response;
+    }catch(error){
+        console.log("Error getting response");
+    }
+}

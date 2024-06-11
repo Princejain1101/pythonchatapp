@@ -22,8 +22,6 @@ def remove_newlines(serie):
 def create_text_files_frame(domain, text_dir="text/", url_dir="urls/", process_dir="processed/"):
     texts=[]
 
-    if not os.path.exists(process_dir +"/"):
-        os.mkdir(process_dir)
     # Get all the text files in the text directory
     for file in os.listdir(text_dir + domain + "/"):
 
@@ -43,10 +41,10 @@ def create_text_files_frame(domain, text_dir="text/", url_dir="urls/", process_d
 
     # Set the text column to be the raw text with the newlines removed
     df['text'] = df.fname + ". " + remove_newlines(df.text)
-    df.to_csv(process_dir+'scraped.csv')
+    df.to_csv(process_dir+ domain + '/scraped.csv')
     df.head()
 
-    df = pd.read_csv(process_dir+'scraped.csv', index_col=0)
+    df = pd.read_csv(process_dir+ domain + '/scraped.csv', index_col=0)
     df.columns = ['url', 'title', 'text']
 
     # Tokenize the text and save the number of tokens to a new column
@@ -98,6 +96,12 @@ def split_into_many(text, url, max_tokens = max_tokens):
     return chunks
 
 def build_embeddings(domain, text_dir="text/", url_dir="urls/", process_dir="processed/"):
+
+    if not os.path.exists(process_dir +"/"):
+        os.mkdir(process_dir)
+    if not os.path.exists(process_dir+ domain+"/"):
+            os.mkdir(process_dir + domain + "/")
+
     df = create_text_files_frame(domain, text_dir, url_dir, process_dir)
 
     shortened = []
@@ -128,5 +132,5 @@ def build_embeddings(domain, text_dir="text/", url_dir="urls/", process_dir="pro
 
     df['embeddings'] = df.text.apply(lambda x: client.embeddings.create(input=x, model='text-embedding-ada-002').data[0].embedding)
 
-    df.to_csv(process_dir+'embeddings.csv')
+    df.to_csv(process_dir+ domain + '/embeddings.csv')
     df.head()

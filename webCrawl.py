@@ -79,7 +79,7 @@ def get_domain_hyperlinks(local_domain, url):
     return list(set(clean_links))
 
 
-def crawl(url, dir="text/", url_dir="urls/"):
+def crawl(url, text_dir="text/", url_dir="urls/"):
     # Parse the URL and get the domain
     local_domain = urlparse(url).netloc
 
@@ -90,11 +90,11 @@ def crawl(url, dir="text/", url_dir="urls/"):
     seen = set([url])
 
     # Create a directory to store the text files
-    if not os.path.exists(dir):
-            os.mkdir(dir)
+    if not os.path.exists(text_dir):
+            os.mkdir(text_dir)
 
-    if not os.path.exists(dir+local_domain+"/"):
-            os.mkdir(dir + local_domain + "/")
+    if not os.path.exists(text_dir+local_domain+"/"):
+            os.mkdir(text_dir + local_domain + "/")
 
     if not os.path.exists(url_dir):
             os.mkdir(url_dir)
@@ -102,9 +102,9 @@ def crawl(url, dir="text/", url_dir="urls/"):
     if not os.path.exists(url_dir + local_domain+"/"):
             os.mkdir(url_dir + local_domain + "/")
 
-    # Create a directory to store the csv files
-    if not os.path.exists("processed"):
-            os.mkdir("processed")
+    # # Create a directory to store the csv files
+    # if not os.path.exists("processed"):
+    #         os.mkdir("processed")
 
     # While the queue is not empty, continue crawling
     while queue:
@@ -118,7 +118,7 @@ def crawl(url, dir="text/", url_dir="urls/"):
         with open (url_dir+local_domain+'/'+ txt_file_name, "w") as f:
             f.write(url)
         # Save text from the url to a <url>.txt file
-        with open(dir+local_domain+'/'+ txt_file_name, "w") as f:
+        with open(text_dir+local_domain+'/'+ txt_file_name, "w") as f:
 
             # Get the text from the URL using BeautifulSoup
             soup = BeautifulSoup(requests.get(url).text, "html.parser")
