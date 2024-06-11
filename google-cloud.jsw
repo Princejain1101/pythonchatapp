@@ -6,7 +6,7 @@ const postData = {
     "request": 'how are you?'
 };
 export async function getResponseGCP(query) {
-    const url = "https://chatbot-openai-2.uw.r.appspot.com/chatbot";
+    const url = "<Your gcloud server URL dumped after gcloud app deploy>/chatbot";
     const options = {
         method: "POST",
         headers: {
